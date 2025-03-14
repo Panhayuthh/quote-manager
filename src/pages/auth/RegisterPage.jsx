@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { AppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
     const navigate = useNavigate();
@@ -31,15 +32,17 @@ export default function RegisterPage() {
                 setToken(data.token);
                 await fetchUser(data.token);
                 navigate('/');
+
+                toast.success("Account created successfully!");
             }
         } catch (error) {
             if (error.response) {
                 const errors = error.response.data.errors;
                 setErrors(errors);
                 console.log('Error Data:', errors);
-                console.log('Error Status:', error.response.status);
             } else {
                 console.log('Error:', error.message);
+                toast.error("An unknown error occurred.");
             }
         } finally {
             setLoading(false);

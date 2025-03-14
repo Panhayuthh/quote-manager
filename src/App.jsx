@@ -6,12 +6,13 @@ import GuestLayout from './layouts/GuestLayout';
 import AuthLayout from './layouts/AuthLayout';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-700">
+      <div className="min-h-screen bg-gray-100">
         <Routes>
           <Route element={ <AuthLayout /> }>
               <Route path="/" element={ <HomePage /> } />
@@ -22,7 +23,9 @@ function App() {
               <Route path="/login" element={ <LoginPage /> } />
               <Route path='/register' element={ <RegisterPage /> } />
           </Route>
+
         </Routes>
+          <ToastContainer position='bottom-right' />
       </div>
     </Router>
   )

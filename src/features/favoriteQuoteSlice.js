@@ -1,13 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const fetchFavoriteQuote = createAsyncThunk(
     "favoriteQuote/fetch",
-    async (_, { rejectWithValue }) => {
+    async (userId, { rejectWithValue }) => {
 
         try {
+            console.log("Fetching favorite quotes for user:", userId);
             const response = await axios.get('api/quotes',
                 {
+                    params: { userId: userId },
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -20,6 +23,7 @@ export const fetchFavoriteQuote = createAsyncThunk(
 
             return favoriteQuotes;
         } catch (error) {
+            // console.error("Error fetching favorite quotes:", error.response?.data?.message);
             return rejectWithValue(error.response?.data?.message || error.message);
         }
     }
@@ -27,37 +31,87 @@ export const fetchFavoriteQuote = createAsyncThunk(
 
 export const saveFavoriteQuote = createAsyncThunk(
     "favoriteQuote/save",
-    async ({quote, userId}, { rejectWithValue }) => {
+    async ({ quote, userId }, { rejectWithValue }) => {
         try {
-            console.log("quote", quote);
-            await axios.post('api/quotes',
-                { ...quote, userId: userId }, {
+            const response = await axios.post(
+                "api/quotes",
+                { ...quote, userId },
+                {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
                 }
             );
 
+            // Ensure response contains the quote data
+            if (!response.data || !response.data.data) {
+                throw new Error("Invalid response from server");
+            }
+
+            // Update local storage
             const currentQuotes = JSON.parse(localStorage.getItem("favoriteQuotes")) || [];
-            const updateQuotes = [...currentQuotes, quote];
-            localStorage.setItem("favoriteQuotes", JSON.stringify(updateQuotes));
-            console.log("qoute saved");
-            return quote;
+            const updatedQuotes = [...currentQuotes, response.data];
+            localStorage.setItem("favoriteQuotes", JSON.stringify(updatedQuotes));
+
+            toast.success("Quote saved successfully!");
+
+            return updatedQuotes; // Return the saved quote
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || error.message);
+            let errorMessage = "An unknown error occurred.";
+
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    errorMessage = error.response.data?.message || "An error occurred while saving the quote.";
+                } else if (error.request) {
+                    errorMessage = "No response from server. Please try again.";
+                }
+            } else {
+                errorMessage = error.message;
+            }
+
+            toast.error(errorMessage); // Show error toast
+
+            return rejectWithValue(errorMessage);
         }
     }
 );
 
 export const removeFavoriteQuote = createAsyncThunk(
     "favoriteQuote/remove",
-    async (quote, { rejectWithValue }) => {
+    async (quoteId, { rejectWithValue }) => {
         try {
-            await axios.delete(`${'api/quotes'}/${quote.id}`);
-            localStorage.removeItem("favoriteQuote");
-            return null; // Returning null to reset state
+            console.log("Removing quote:", quoteId);
+
+            await axios.delete(`api/quotes/${quoteId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            // Update local storage after successful deletion
+            let currentQuotes = JSON.parse(localStorage.getItem("favoriteQuotes")) || [];
+            const updatedQuotes = currentQuotes.filter((quote) => quote.id !== quoteId);
+            localStorage.setItem("favoriteQuotes", JSON.stringify(updatedQuotes));
+
+            toast.success("Quote removed successfully!");
+
+            return updatedQuotes; // Return updated list
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || error.message);
+            let errorMessage = "An unknown error occurred.";
+
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    errorMessage = error.response.data?.message || "Failed to remove the quote.";
+                } else if (error.request) {
+                    errorMessage = "No response from server. Please try again.";
+                }
+            } else {
+                errorMessage = error.message;
+            }
+
+            toast.error(errorMessage); // Show error notification
+
+            return rejectWithValue(errorMessage);
         }
     }
 );
@@ -85,6 +139,7 @@ const favoriteQuoteSlice = createSlice({
             .addCase(fetchFavoriteQuote.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+                toast.error(action.payload);
             })
 
             // Save favorite quote

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
 
@@ -31,6 +32,8 @@ export default function LoginPage() {
                 setToken(data.token);
                 await fetchUser(data.token);
                 navigate('/');
+
+                toast.success("Login successful!");
             }
         } catch (error) {
             if (error.response) {
@@ -39,15 +42,12 @@ export default function LoginPage() {
                 if (status === 401) {
                     setErrors({ password: data.error });
                 } else if (status === 500) {
-                    setErrors({ general: "Server error. Please try again later." });
+                    toast.error(data.message);
                 } else {
-                    setErrors(data.errors || { general: data.message });
+                    setErrors(data.errors || "Unknown error occurred.");
                 }
     
                 console.log('Error Response:', error.response.data);
-            } else {
-                console.log('Error:', error.message);
-                setErrors({ general: "Network error. Please try again." });
             }
         } finally {
             setLoading(false);
