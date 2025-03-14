@@ -15,7 +15,7 @@ export default function AppProvider({ children }) {
                     Authorization: `Bearer ${token}`
                 }
             });
-            console.log('User:', response.data);
+            // console.log('User:', response.data);
             setUser(response.data);
         } catch (error) {
             console.log('Error:', error.message);
@@ -27,7 +27,7 @@ export default function AppProvider({ children }) {
 
     useEffect(() => {
         if (token) {
-            console.log('Fetching user...');
+            // console.log('Fetching user...');
             fetchUser(token);
         } else {
             setIsLoading(false);

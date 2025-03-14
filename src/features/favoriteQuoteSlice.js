@@ -1,21 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const URL = "http://127.0.0.1:8000/api/quotes";
-
 export const fetchFavoriteQuote = createAsyncThunk(
     "favoriteQuote/fetch",
     async (_, { rejectWithValue }) => {
-        const savedQuote = localStorage.getItem("favoriteQuote");
-        if (savedQuote) return JSON.parse(savedQuote);
 
         try {
-            const response = await axios.get(URL);
-            const favoriteQuote = response.data;
+            const response = await axios.get('api/quotes',
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            );
+            const favoriteQuotes = response.data.data;
+            // console.log("favoriteQuotes", favoriteQuotes);
 
-            localStorage.setItem("favoriteQuote", JSON.stringify(favoriteQuote));
+            localStorage.setItem("favoriteQuotes", JSON.stringify(favoriteQuotes));
 
-            return favoriteQuote;
+            return favoriteQuotes;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || error.message);
         }
@@ -24,10 +27,21 @@ export const fetchFavoriteQuote = createAsyncThunk(
 
 export const saveFavoriteQuote = createAsyncThunk(
     "favoriteQuote/save",
-    async (quote, { rejectWithValue }) => {
+    async ({quote, userId}, { rejectWithValue }) => {
         try {
-            await axios.post(URL, quote);
-            localStorage.setItem("favoriteQuote", JSON.stringify(quote));
+            console.log("quote", quote);
+            await axios.post('api/quotes',
+                { ...quote, userId: userId }, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            );
+
+            const currentQuotes = JSON.parse(localStorage.getItem("favoriteQuotes")) || [];
+            const updateQuotes = [...currentQuotes, quote];
+            localStorage.setItem("favoriteQuotes", JSON.stringify(updateQuotes));
+            console.log("qoute saved");
             return quote;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || error.message);
@@ -39,7 +53,7 @@ export const removeFavoriteQuote = createAsyncThunk(
     "favoriteQuote/remove",
     async (quote, { rejectWithValue }) => {
         try {
-            await axios.delete(`${URL}/${quote.id}`);
+            await axios.delete(`${'api/quotes'}/${quote.id}`);
             localStorage.removeItem("favoriteQuote");
             return null; // Returning null to reset state
         } catch (error) {
@@ -52,7 +66,7 @@ export const removeFavoriteQuote = createAsyncThunk(
 const favoriteQuoteSlice = createSlice({
     name: "favoriteQuote",
     initialState: {
-        favoriteQuote: null,
+        favoriteQuotes: [],
         loading: false,
         error: null,
     },
@@ -66,7 +80,7 @@ const favoriteQuoteSlice = createSlice({
             })
             .addCase(fetchFavoriteQuote.fulfilled, (state, action) => {
                 state.loading = false;
-                state.favoriteQuote = action.payload;
+                state.favoriteQuotes = action.payload;
             })
             .addCase(fetchFavoriteQuote.rejected, (state, action) => {
                 state.loading = false;
@@ -79,20 +93,20 @@ const favoriteQuoteSlice = createSlice({
             })
             .addCase(saveFavoriteQuote.fulfilled, (state, action) => {
                 state.loading = false;
-                state.favoriteQuote = action.payload;
+                state.favoriteQuotes = action.payload;
             })
             .addCase(saveFavoriteQuote.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload;
+                state.error = [...state.favoriteQuotes, action.payload];
             })
 
             // Remove favorite quote
             .addCase(removeFavoriteQuote.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(removeFavoriteQuote.fulfilled, (state) => {
+            .addCase(removeFavoriteQuote.fulfilled, (state, action) => {
                 state.loading = false;
-                state.favoriteQuote = null;
+                state.favoriteQuotes = action.payload;
             })
             .addCase(removeFavoriteQuote.rejected, (state, action) => {
                 state.loading = false;

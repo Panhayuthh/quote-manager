@@ -5,7 +5,7 @@ import favoriteQuoteReducer from "./features/favoriteQuoteSlice";
 export const store = configureStore({
     reducer: {
         quote: quoteReducer,
-        favourite: favoriteQuoteReducer
+        favorite: favoriteQuoteReducer
         // auth: authReducer
     }
 });

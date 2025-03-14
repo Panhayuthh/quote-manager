@@ -1,10 +1,12 @@
-import QuoteCard from "../components/QuoteCard"
+import FavoriteQuoteCard from '../components/FavoriteQuoteCard';
 
 export default function FavoriteQuotePage() {
     return (
         <div>
-            <h1 className="text-4xl font-bold text-center mt-8">Favorite Quote Page</h1>
-            {/* <QuoteCard /> */}
+            <h1 className="text-4xl font-bold text-center mt-8">My Favorite Quote</h1>
+            <div className="mt-8">
+                <FavoriteQuoteCard />
+            </div>
         </div>
     )
 }
