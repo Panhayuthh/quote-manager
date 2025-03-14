@@ -1,21 +1,28 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar'
 import HomePage from './pages/HomePage'
 import FavoriteQuotePage from './pages/FavoriteQuotePage'
 import './App.css'
+import GuestLayout from './layouts/GuestLayout';
+import AuthLayout from './layouts/AuthLayout';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
 
 function App() {
 
   return (
     <Router>
-      <div className="min-h-screen">
-        <Navbar />
-        <main className="container mx-auto py-8 px-4">
-          <Routes>
-            <Route path='/' element= { <HomePage /> } />
-            <Route path='/favorite' element= { <FavoriteQuotePage /> } />
-          </Routes>
-        </main>
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-700">
+        <Routes>
+          <Route element={ <AuthLayout /> }>
+              <Route path="/" element={ <HomePage /> } />
+              <Route path="/favorite" element={ <FavoriteQuotePage /> } />
+          </Route>
+
+          <Route element={ <GuestLayout /> }>
+              <Route path="/login" element={ <LoginPage /> } />
+              <Route path='/register' element={ <RegisterPage /> } />
+          </Route>
+        </Routes>
       </div>
     </Router>
   )
