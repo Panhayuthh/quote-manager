@@ -2,6 +2,9 @@ import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFavoriteQuote, removeFavoriteQuote } from "../features/favoriteQuoteSlice";
 import { AppContext } from "../context/AppContext";
+import ServerErrorSvg from "./SVG/ServerErrorSvg";
+import SignInRequireSvg from "./SVG/SignInRequireSvg";
+import EmptyFolderSvg from "./SVG/EmptyFolderSvg";
 
 export default function FavoriteQuoteCard() {
 
@@ -36,8 +39,10 @@ export default function FavoriteQuoteCard() {
         return (
             <div className="container max-w-3xl mx-auto">
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-6">
-                    <img src="src\assets\woman-laptop-sitting-dark.png" alt="Login to see favorite quotes" className="h-48 mx-auto" />
-                    <p className="text-gray-600 text-center mt-6"> You need to login to see your favorite quotes.</p>
+                    <div className="flex justify-center items-center p-6 mb-6">
+                        <SignInRequireSvg />
+                    </div>
+                    <p className="text-gray-600 text-center"> You need to login to see your favorite quotes.</p>
                 </div>
             </div>
         );
@@ -45,9 +50,13 @@ export default function FavoriteQuoteCard() {
 
     if (error) {
         return (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                <strong className="font-bold">Error!</strong>
-                <span className="block sm:inline"> {error}</span>
+            <div className="container max-w-3xl mx-auto">
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-6">
+                    <div className="flex justify-center items-center p-6 mb-6">
+                        <ServerErrorSvg />
+                    </div>
+                    <p className="text-gray-600 text-center">An error occurred while fetching the quote. Please try again.</p>
+                </div>
             </div>
         );
     }
@@ -56,8 +65,10 @@ export default function FavoriteQuoteCard() {
         return (
             <div className="container max-w-3xl mx-auto">
                 <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-6">
-                    <img src="src\assets\document-folders-dark.png" alt="No favorite quotes" className="h-48 mx-auto" />
-                    <p className="text-gray-600 text-center mt-6">You have not saved any quotes yet!</p>
+                    <div className="flex justify-center items-center p-6 mb-6">
+                        <EmptyFolderSvg />
+                    </div>
+                    <p className="text-gray-600 text-center">You have not saved any quotes yet!</p>
                 </div>
             </div>
         );

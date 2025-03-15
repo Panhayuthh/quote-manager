@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useSelector ,useDispatch } from "react-redux";
 import { saveFavoriteQuote } from "../features/favoriteQuoteSlice";
 import { AppContext } from "../context/AppContext";
+import ServerErrorSvg from "./SVG/ServerErrorSvg";
 
 export default function QuoteCard() {
     const { quote, loading, error } = useSelector((state) => state.quote);
@@ -32,10 +33,14 @@ export default function QuoteCard() {
 
     if (error) {
         return (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <strong className="font-bold">Error!</strong>
-            <span className="block sm:inline"> {error}</span>
-          </div>
+            <div className="container max-w-3xl mx-auto">
+                <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-6">
+                    <div className="flex justify-center items-center p-6 mb-6">
+                        <ServerErrorSvg />
+                    </div>
+                    <p className="text-gray-600 text-center mt-6">An error occurred while fetching the quote. Please try again.</p>
+                </div>
+            </div>
         );
       }
     

@@ -13,7 +13,7 @@ export const fetchQuote = createAsyncThunk("quote/fetchQuote",
     } catch (error) {
 
         toast.error("An error occurred while fetching the quote.");
-        console.log("Error fetching quote:", error.message);
+        console.log("Error fetching quote:", error);
         return rejectWithValue(error.message);
     }
 });
