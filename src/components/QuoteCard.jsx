@@ -3,6 +3,7 @@ import { useSelector ,useDispatch } from "react-redux";
 import { saveFavoriteQuote } from "../features/favoriteQuoteSlice";
 import { AppContext } from "../context/AppContext";
 import ServerErrorSvg from "./SVG/ServerErrorSvg";
+import { toast } from "react-toastify";
 
 export default function QuoteCard() {
     const { quote, loading, error } = useSelector((state) => state.quote);
@@ -12,6 +13,11 @@ export default function QuoteCard() {
     const [bottomLoading, setBottomLoading] = useState(false);
 
     const handleSaveFavorite = async () => {
+        if (!user) {
+            toast.error("You must be logged in to save a quote.");
+            return;
+        }
+
         if (quote) {
             setBottomLoading(true);
             await

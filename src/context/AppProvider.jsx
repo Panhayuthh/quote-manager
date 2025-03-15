@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AppContext } from "./AppContext";
 import axios from "axios";
 
+let VITE_API_URL = import.meta.env.VITE_API_URL;
+
 export default function AppProvider({ children }) {
     const [token, setToken] = useState(localStorage.getItem('token'));
     const [user, setUser] = useState(null);
@@ -10,10 +12,15 @@ export default function AppProvider({ children }) {
     // Fetch user data
     async function fetchUser(token) {
         try {
-            const response = await axios.get('api/user', {
+            const response = await axios.get(VITE_API_URL + '/user', 
+                {
                 headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+                secure: true,
             });
             // console.log('User:', response.data);
             setUser(response.data);

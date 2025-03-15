@@ -4,6 +4,8 @@ import { AppContext } from '../context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+let VITE_API_URL = import.meta.env.VITE_API_URL;
+
 const Navbar = () => {
     const location = useLocation();
     const { user, setToken, setUser } = useContext(AppContext);
@@ -13,7 +15,8 @@ const Navbar = () => {
     const handleLogout = async () => {
         
         // call to API to logout
-        const response = await axios.post('/api/auth/logout', {}, {
+        const response = await axios.post(VITE_API_URL + '/auth/logout', 
+            {}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
