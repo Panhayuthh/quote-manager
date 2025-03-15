@@ -4,9 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(({ mode }) => {
   // Load environment variables
-  // const env = loadEnv(mode, process.cwd(), '');
-
-  let env = 'https://goldfish-app-7eixm.ondigitalocean.app';
+  const env = loadEnv(mode, process.cwd(), '');
 
   return {
     plugins: [
@@ -16,7 +14,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: env,
+          target: env.VITE_API_URL,
           changeOrigin: true,
           secure: true,
           withCredentials: true,

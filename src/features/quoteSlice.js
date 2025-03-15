@@ -2,10 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+let VITE_API_URL = import.meta.env.VITE_API_URL;
+
 export const fetchQuote = createAsyncThunk("quote/fetchQuote", 
     async (_, { rejectWithValue }) => {
     try {
-        const response = await axios.get('api/quotes/random');
+        const response = await axios.get(`${VITE_API_URL}/quote/random`);
 
         const data = response.data.data;
         // console.log(data);
