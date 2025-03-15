@@ -66,6 +66,9 @@ export default function LoginPage() {
         <div className="container mx-auto flex items-center justify-center h-screen">
             <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8">
                 <form className="space-y-6" onSubmit={handleLogin}>
+                    <Link to="/" className="block mx-auto">
+                        <img src="/quote.png" alt="quotator" className="h-20 w-20 mx-auto" />
+                    </Link>
                     <h5 className="text-xl font-medium text-gray-900">Sign in to our platform</h5>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Your email</label>
@@ -98,7 +101,7 @@ export default function LoginPage() {
                     <button 
                         type="submit" 
                         className={`w-full mt-6 font-medium rounded-full text-sm px-5 py-2.5 text-center 
-                                    flex justify-center items-center transition text-white bg-gradient-to-r from-blue-500 to-blue-700
+                                    flex justify-center items-center transition text-white bg-gradient-to-r from-blue-500 to-purple-700
                                     ${loading ? "cursor-not-allowed" : "hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-blue-300"}`}
                         disabled={loading}
                     >

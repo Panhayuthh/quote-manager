@@ -65,6 +65,9 @@ export default function RegisterPage() {
         <div className="container mx-auto flex items-center justify-center h-screen">
             <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8">
                 <form className="space-y-6" onSubmit={handleRegister}>
+                    <Link to="/" className="block mx-auto">
+                        <img src="/quote.png" alt="quotator" className="h-20 w-20 mx-auto" />
+                    </Link>
                     <h5 className="text-xl font-medium text-gray-900">Create an account</h5>
                     
                     <div>
@@ -105,7 +108,7 @@ export default function RegisterPage() {
                     <button 
                         type="submit" 
                         className={`w-full mt-6 font-medium rounded-full text-sm px-5 py-2.5 text-center 
-                                    flex justify-center items-center transition text-white bg-gradient-to-r from-blue-500 to-blue-700
+                                    flex justify-center items-center transition text-white bg-gradient-to-r from-blue-500 to-purple-700
                                     ${loading ? "cursor-not-allowed" : "hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-blue-300"}`}
                         disabled={loading}
                     >
