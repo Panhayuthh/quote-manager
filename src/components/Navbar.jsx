@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
     const location = useLocation();
@@ -8,8 +10,25 @@ const Navbar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        
+        // call to API to logout
+        const response = await axios.post('/api/auth/logout', {}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        if (response.status === 200) {
+            toast.success('Logged out successfully');
+            // console.log('Logged out successfully');
+        } else {
+            toast.error('Error logging out');
+            console.error('Error logging out:', response.data.message);
+        }
+        
         localStorage.removeItem('token');
+
         setToken(null);
         setUser(null);
     };
