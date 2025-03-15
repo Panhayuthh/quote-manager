@@ -24,7 +24,9 @@ export default function RegisterPage() {
         setLoading(true);
 
         try {
-            const response = await axios.post('api/auth/register', formData);
+            const response = await axios.post('api/auth/register', formData, {
+                withCredentials: true
+            });
 
             if (response.status === 200) {
                 const data = response.data.data;
@@ -38,10 +40,14 @@ export default function RegisterPage() {
                 toast.success("Account created successfully!");
             }
         } catch (error) {
-            if (error.response) {
+            if (error.response.data.errors) {
                 const errors = error.response.data.errors;
                 setErrors(errors);
                 console.log('Error Data:', errors);
+            } else if (error.response) { 
+                const error = error.response.data;
+                console.log('Error Response:', error);
+                toast.error("An error occurred while creating the account.");
             } else {
                 console.log('Error:', error.message);
                 toast.error("An unknown error occurred.");

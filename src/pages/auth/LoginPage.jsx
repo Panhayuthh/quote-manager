@@ -24,7 +24,10 @@ export default function LoginPage() {
         setErrors({});
     
         try {
-            const response = await axios.post('/api/auth/login', loginData);
+            const response = await axios.post('/api/auth/login', loginData, {
+                withCredentials: true
+                
+            });
     
             if (response.status === 200) {
                 const data = response.data.data;
