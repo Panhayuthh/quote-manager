@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const fetchQuote = createAsyncThunk("quote/fetchQuote", 
     async (_, { rejectWithValue }) => {
@@ -10,6 +11,9 @@ export const fetchQuote = createAsyncThunk("quote/fetchQuote",
         // console.log(data);
         return data;
     } catch (error) {
+
+        toast.error("An error occurred while fetching the quote.");
+
         return rejectWithValue(error.message);
     }
 });
@@ -22,6 +26,7 @@ const quoteSlice = createSlice({
         error: null,
     },
     reducers: {},
+    // handling async actions with createAsyncThunk
     extraReducers: (builder) => {
         builder
             .addCase(fetchQuote.pending, (state) => {

@@ -63,7 +63,7 @@ const Navbar = () => {
                             <Link to="/register" className="hidden md:block py-2 px-4 text-sm font-medium text-gray-900 rounded-lg hover:text-blue-500">
                                 Register
                             </Link>
-                            <Link to="/login" className="hidden md:block py-2 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <Link to="/login" className="hidden md:block py-2 px-4 text-sm font-medium text-white rounded-full bg-gradient-to-r from-blue-500 to-blue-700 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-blue-300">
                                 Get Started
                             </Link>
                         </div>

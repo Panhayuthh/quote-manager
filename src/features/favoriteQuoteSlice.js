@@ -7,7 +7,7 @@ export const fetchFavoriteQuote = createAsyncThunk(
     async (userId, { rejectWithValue }) => {
 
         try {
-            console.log("Fetching favorite quotes for user:", userId);
+            // console.log("Fetching favorite quotes for user:", userId);
             const response = await axios.get('api/quotes',
                 {
                     params: { userId: userId },
@@ -55,7 +55,7 @@ export const saveFavoriteQuote = createAsyncThunk(
 
             toast.success("Quote saved successfully!");
 
-            return updatedQuotes; // Return the saved quote
+            return updatedQuotes; // Return the updated quotes
         } catch (error) {
             let errorMessage = "An unknown error occurred.";
 
@@ -69,7 +69,7 @@ export const saveFavoriteQuote = createAsyncThunk(
                 errorMessage = error.message;
             }
 
-            toast.error(errorMessage); // Show error toast
+            toast.error(errorMessage);
 
             return rejectWithValue(errorMessage);
         }

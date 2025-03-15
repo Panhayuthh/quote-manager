@@ -7,6 +7,7 @@ import AuthLayout from './layouts/AuthLayout';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import { ToastContainer } from 'react-toastify';
+import NotFound from './pages/NotFound';
 
 function App() {
 
@@ -24,6 +25,8 @@ function App() {
               <Route path='/register' element={ <RegisterPage /> } />
           </Route>
 
+          {/* route to notfound page */}
+          <Route path="*" element={ <NotFound /> } />
         </Routes>
           <ToastContainer position='bottom-right' />
       </div>
