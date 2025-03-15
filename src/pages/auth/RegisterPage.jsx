@@ -4,6 +4,8 @@ import axios from "axios";
 import { AppContext } from "../../context/AppContext";
 import { toast } from "react-toastify";
 
+let VITE_API_URL = import.meta.env.VITE_API_URL;
+
 export default function RegisterPage() {
     const navigate = useNavigate();
     const { setToken, fetchUser } = useContext(AppContext);
@@ -24,8 +26,10 @@ export default function RegisterPage() {
         setLoading(true);
 
         try {
-            const response = await axios.post('api/auth/register', formData, {
-                withCredentials: true
+            const response = await axios.post(VITE_API_URL + '/auth/register', 
+                formData, {
+                withCredentials: true,
+                secure: true
             });
 
             if (response.status === 200) {

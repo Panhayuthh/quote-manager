@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import { toast } from "react-toastify";
 
+let VITE_API_URL = import.meta.env.VITE_API_URL;
+
 export default function LoginPage() {
 
     const { setToken, fetchUser } = useContext(AppContext);
@@ -24,9 +26,11 @@ export default function LoginPage() {
         setErrors({});
     
         try {
-            const response = await axios.post('/api/auth/login', loginData, {
-                withCredentials: true
-                
+            const response = await axios.post(VITE_API_URL + '/auth/login',
+                loginData, {
+                withCredentials: true,
+                secure: true
+
             });
     
             if (response.status === 200) {

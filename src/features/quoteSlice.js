@@ -7,7 +7,14 @@ let VITE_API_URL = import.meta.env.VITE_API_URL;
 export const fetchQuote = createAsyncThunk("quote/fetchQuote", 
     async (_, { rejectWithValue }) => {
     try {
-        const response = await axios.get(`${VITE_API_URL}/quote/random`);
+        const response = await axios.get(`${VITE_API_URL}/quotes/random`, {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            withCredentials: true,
+            secure: true,
+        });
 
         const data = response.data.data;
         // console.log(data);

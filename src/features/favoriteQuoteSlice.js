@@ -2,18 +2,24 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+let VITE_API_URL = import.meta.env.VITE_API_URL;
+
 export const fetchFavoriteQuote = createAsyncThunk(
     "favoriteQuote/fetch",
     async (userId, { rejectWithValue }) => {
 
         try {
             // console.log("Fetching favorite quotes for user:", userId);
-            const response = await axios.get('api/quotes',
+            const response = await axios.get(VITE_API_URL + "/quotes",
                 {
                     params: { userId: userId },
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+                    secure: true,
                 }
             );
             const favoriteQuotes = response.data.data;
@@ -34,12 +40,16 @@ export const saveFavoriteQuote = createAsyncThunk(
     async ({ quote, userId }, { rejectWithValue }) => {
         try {
             const response = await axios.post(
-                "api/quotes",
+                VITE_API_URL + "/quotes",
                 { ...quote, userId },
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
                     },
+                    withCredentials: true,
+                    secure: true,
                 }
             );
 
@@ -82,10 +92,15 @@ export const removeFavoriteQuote = createAsyncThunk(
         try {
             console.log("Removing quote:", quoteId);
 
-            await axios.delete(`api/quotes/${quoteId}`, {
+            await axios.delete(VITE_API_URL + `/quotes/${quoteId}`,
+                {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
                 },
+                withCredentials: true,
+                secure: true,
             });
 
             // Update local storage after successful deletion
